@@ -4,6 +4,30 @@
  * Copyright 2011-2019 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
+
+.container .swiper-pagination {
+  position: static;
+
+  box-sizing: border-box;
+  padding: 5%;
+
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.container .swiper-pagination-bullet {
+  background-color: transparent;
+
+  width: fit-content;
+  height: fit-content;
+
+  position: relative;
+
+  font-family: var(--poppins);
+  font-size: var(--m);
+  font-weight: 300;
+  color: white;
+}
 :root {
   --blue: #007bff;
   --indigo: #6610f2;

@@ -12,13 +12,6 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-    res.json({
-        estado: true,
-        mensaje: 'Funciona!'
-    })
-})
-
 // cors
 const cors = require('cors');
 var corsOptions = {
@@ -33,8 +26,15 @@ const verifyToken = require("./routes/validate-token");
 
 app.use('/api/user', authRoutes);
 
+app.get('/', (req, res) => {
+    res.json({
+        estado: true,
+        mensaje: 'Funciona!'
+    })
+})
+
 //Exponemos el puerto para que escuche
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`El servidor está inicializado en el puerto ${PORT}`);
 });

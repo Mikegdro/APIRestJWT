@@ -1,9 +1,8 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
+const verifyToken = require('./validate-token');
 
 router.post('/login', async (req, res) => {
-
-    emailVerifier(req.body.email);
 
     const token = jwt.sign({
         name: req.body.name,
@@ -17,4 +16,8 @@ router.post('/login', async (req, res) => {
 
 });
 
+// router.post('/logout', verifyToken, async (req, res) => {
+//     let token = req.header('auth-token');
+    
+// });
 module.exports = router;
