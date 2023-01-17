@@ -22,7 +22,6 @@ app.use(cors(corsOptions));
 
 //============ Rutas ============
 const authRoutes = require("./routes/auth");
-const verifyToken = require("./routes/validate-token");
 
 app.use('/api/user', authRoutes);
 

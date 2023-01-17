@@ -1,13 +1,13 @@
+import { Communication } from "./communication/communication.js";
+
 /*
-*
 *   Eventos Formulario
-*
 */
 $('.login').on('click', e => {
     let form = $('.loginForm').serializeArray();
     login(form);
 });
-$('.logout').on('click', e => {
+$('.logoutBtn').on('click', e => {
     logout();
 })
 $('.register').on('click', e => {
@@ -15,14 +15,17 @@ $('.register').on('click', e => {
     register(form);
 })
 
+//Token que se obtiene del servidor al logearse
 let myToken = null;
+
+//Objeto communication que manejará el web socket de regex
+let communication = null;
 
 /**
  * Función asíncrona login, recibe un json con los valores del formulario
- * @param {json} form 
+ * @param { json } form 
  */
 async function login(form) {
-    console.log(form)
     try {
         let res = await fetch('http://localhost:3000/api/user/login', {
             method: "POST",
@@ -38,11 +41,20 @@ async function login(form) {
         let error = `${data.error}`;
 
         if(error === "null") {
-            myToken = data.data.myToken;
+            myToken = data.data.token;
 
             buildUI({
                 operation: "login",
-            }); 
+            });
+            
+            communication = new Communication();
+            communication.init({
+                ip: data.body.serverIp,
+                port: data.body.serverPort,
+                token: myToken,
+                logout: eval(logout)
+            });
+
         }
          
     } catch(error) {
@@ -50,6 +62,10 @@ async function login(form) {
     }
 }
 
+/**
+ * Función de registro de usuarios
+ * @param { json } data 
+ */
 async function register(form) {
     try {
         let res = await fetch('http://localhost:3000/api/user/register', {
@@ -79,35 +95,26 @@ async function register(form) {
     }
 }
 
+/**
+ * Función de logout, borra el token de manera local y reinicia la interfaz
+ * @param { json } data 
+ */
 async function logout() {
-    try {
-        let res = await fetch('http://localhost:3000/api/user/logout', {
-            method: "POST",
-            headers: {
-                "Accept": "application/json",
-                "Content-type": "application/json",
-                "auth-token": {myToken}
-            },
-        });
-
-        let data = await res.json();
-
-        let error = `${data.error}`;
-
-        if(error === "null") {
-            buildUI({
-                operation: "logout",
-            }); 
-        }
-         
-    } catch(error) {
-        console.error(error);
+    myToken = null;
+    
+    if(communication != null) {
+        communication.close();
+        communication = null;
     }
+
+    buildUI({
+        operation: "logout"
+    });
 }
 
 /**
- * Función de construcción de interfaz para cuando se ha logeado/deslogeado un usuario
- * @param {json} data 
+ * Función de construcción de interfaz dependiendo de los parámetros del JSON
+ * @param { json } data 
  */
 function buildUI(data) {
     if( data.operation === "login" ) {
@@ -116,6 +123,5 @@ function buildUI(data) {
     } else if( data.operation === "logout" ) {
         $('.container').css("display", "block");
         $('.logout').css("display", "none");
-
     }
 }
