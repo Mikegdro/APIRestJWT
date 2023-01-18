@@ -48,7 +48,12 @@ class Communication {
     }
 
     send(data) {
-        this.socket.send(JSON.stringify(data));
+        const msg = {
+            regex: data[0],
+            ws: this.socket,
+        }
+        console.log(msg)
+        this.socket.send(JSON.stringify(msg));
     }
 
     close() {

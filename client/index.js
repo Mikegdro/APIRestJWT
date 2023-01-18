@@ -22,9 +22,7 @@ $('.register').on('click', e => {
 })
 $('.sendRegex').on('click', e => {
     if(communication) {
-        communication.send({
-            regex: $('.regexForm').serializeArray()[0].value,
-        })
+        communication.send( $('.regexForm').serializeArray() );
     }
 })
 

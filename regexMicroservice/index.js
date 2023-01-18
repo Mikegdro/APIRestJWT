@@ -1,17 +1,30 @@
-import { WebSocketServer } from 'ws';
-import axios from "axios"
+var WebSocketServer = require('ws').Server;
+var Axios = require('axios');
+var parser = require('./gramatica');
+var fs = require('fs');
 
 var wss = new WebSocketServer({port: 8023});
 var clientMaster = null;
 var clients = [];
 var first = true;
 
+
 console.log("Server is Running...");
 
-wss.broadcast = function broadcastMsg(msg, client) {
-    let data = JSON.parse(msg);
+wss.broadcast = function broadcastMsg(msg) {
+    console.log(msg.toJSON())
+    let regex = msg.toString('utf8');
 
-    client.send(JSON.stringify(parseRegex()));
+    console.log(regex)
+
+    regex = JSON.parse(regex);
+
+    let client = regex.ws;
+    
+
+    let regexValidity = parseRegex(regex);
+
+
 };
 
 
@@ -39,14 +52,20 @@ wss.on('connection', function connection(ws, request) {
     })
 });
 
-async function parseRegex() {
+async function parseRegex(regex) {
+    let regexValidity;
 
-
-    return true;
+    try {
+        regexValidity = await parser.parse(`Evaluar[${regex[0].value}];`)
+    } catch( err ) {
+        console.log(err);
+    }
+    
+    return regex;
 }
 
 async function validateToken(token) {
-    const response = await axios.post('http://localhost:3000/api/user/verify', {
+    const response = await post('http://localhost:3000/api/user/verify', {
         headers: {
             Authorization: `token ${token}`
         }
