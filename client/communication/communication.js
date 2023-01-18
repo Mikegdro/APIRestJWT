@@ -6,8 +6,6 @@ class Communication {
     logout = null;
 
     init(config) {
-        console.log(config)
-
         this.logout = config.logout;
         
         this.socket = new WebSocket(`ws://${config.ip}:${config.port}/ws?token=${config.token}`);
@@ -18,22 +16,7 @@ class Communication {
 
         this.socket.onmessage = (event) => {
             let objeto = JSON.parse(event.data);
-
-            switch(objeto.valor) {
-                case 'master':
-                    this.master = true;
-                    config.check(); 
-                break;
-
-                case 'Has sido conectado':
-                    config.check(objeto.id);
-                break;
-
-                default:
-                    if(this.handler) {
-                        this.handler.newMsg(objeto, event.origin);
-                    }
-            }
+            $('.resultado').html(objeto)
             console.log(objeto)
         };
 
@@ -64,17 +47,8 @@ class Communication {
         return this._handler;
     }
 
-    send(data, type, id) {
-        const msg =  {
-            tipo: type,
-            mensaje: data,
-        }
-
-        if(id != null) {
-            msg.id = id;
-        }
-
-        this.socket.send(JSON.stringify(msg));
+    send(data) {
+        this.socket.send(JSON.stringify(data));
     }
 
     close() {

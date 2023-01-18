@@ -1,5 +1,11 @@
 import { Communication } from "./communication/communication.js";
 
+//Token que se obtiene del servidor al logearse
+let myToken = null;
+
+//Objeto communication que manejará el web socket de regex
+let communication = null;
+
 /*
 *   Eventos Formulario
 */
@@ -14,12 +20,15 @@ $('.register').on('click', e => {
     let form = $('.registerForm').serializeArray();
     register(form);
 })
+$('.sendRegex').on('click', e => {
+    if(communication) {
+        communication.send({
+            regex: $('.regexForm').serializeArray()[0].value,
+        })
+    }
+})
 
-//Token que se obtiene del servidor al logearse
-let myToken = null;
 
-//Objeto communication que manejará el web socket de regex
-let communication = null;
 
 /**
  * Función asíncrona login, recibe un json con los valores del formulario
