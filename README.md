@@ -33,3 +33,9 @@ interna con los tokens que le han pasado así como un valor asociado que nos dir
 de veces que ese token ha hecho una petición siendo como máximo 5, en caso de llegar a ese máximo se le revocará el token al usuario y cortará la conexión del web socket.
 
     · Recibe request, comprueba JWT, Ejecuta expresión regular y devuelve respuesta JSON con el resultado de la consulta, si se han realizado 5 o más consultas, corta la conexión con ese usuario.
+
+
+<h1>TO-DO</h1> 
+    · Script de Python que procese la expresión regular recursiva
+    · Conexión a BBDD + comprobación de usuarios
+    · Respuesta del servidor con la expresión regular
