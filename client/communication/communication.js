@@ -7,8 +7,10 @@ class Communication {
 
     init(config) {
         this.logout = config.logout;
-        
-        this.socket = new WebSocket(`ws://${config.ip}:${config.port}/ws?token=${config.token}`);
+
+        let serverIP = `ws://${config.ip}:${config.port}`;
+        //WEBSOCKETRESQUEST => https://github.com/theturtle32/WebSocket-Node/blob/cce6d468986dd356a52af5630fd8ed5726ba5b7a/docs/WebSocketRequest.md
+        this.socket = new WebSocketRequest()
 
         this.socket.onopen = (e) => {
             this.state = true;
@@ -54,9 +56,8 @@ class Communication {
     send(data) {
         const msg = {
             regex: data[0].value,
-            url: this.socket.url,
         }
-        console.log(msg)
+
         this.socket.send(JSON.stringify(msg));
     }
 

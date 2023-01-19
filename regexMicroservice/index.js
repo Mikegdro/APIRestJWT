@@ -3,7 +3,25 @@ var Axios = require('axios');
 var parser = require('./gramatica');
 var fs = require('fs');
 
-var wss = new WebSocketServer({port: 8023});
+var wss = new WebSocketServer({
+    port: 8023,
+    verifyClient: function(info, cb) {
+        var token = info.req.headers.token;
+
+        if(!token) {
+            cb(false, 401, "Unauthorized");
+        } else {
+            jwt.verify(token, `${process.env.TOKEN_SECRET}`, function (err, decoded) {
+                if ( err ) {
+                    cb(false, 401, 'Unauthorized');
+                } else {
+                    info.req.user = decoded;
+                    cb(true);
+                }
+            })
+        }
+    }
+});
 var clients = [];
 
 console.log("Server is Running...");
@@ -12,10 +30,6 @@ wss.broadcast = function broadcastMsg(msg) {
     //Descodificamos la comunicación y la parseamos
     let regex = msg.toString('utf8');
     regex = JSON.parse(regex);
-
-    //Buscamos el cliente en el array de objetos
-    let clientUrl = parseUrl(regex.url);
-    let client = clients.find(elem => elem.token == clientUrl);
     
     //Comprobamos la expresión regular
     let regexValidity = parseRegex(regex);
@@ -34,31 +48,11 @@ wss.broadcast = function broadcastMsg(msg) {
 };
 
 
-wss.on('connection', function connection(ws, request) {
-    console.log(`Connection received: ${request.url}`);
-
-    let token = parseUrl(request.url);
-    let validToken = validateToken(token);
-
-    if(!validToken) {
-        ws.close()
-    }
-
-    ws.send(JSON.stringify({
-        msg: "Auth completed, you have 5 queries total"
-    }))
-
-    clients.push({
-        socket: ws,
-        token: token,
-        tries: 5
-    });
-    
-    ws.on('message', wss.broadcast);
-
-    ws.on('close', e => {
-        console.log(`Disconnection: ${ws}`);
-        clients.splice(clients.indexOf(clients.find(elem => elem.socket == ws)), 1);
+wss.on('connection',  ( conn ) => {
+    let user = conn.upgradeReq.user;
+    ws.send('Welcome!' + user.name);
+    ws.on('message', ( data ) => {
+        console.log(data)
     })
 });
 
@@ -72,23 +66,4 @@ async function parseRegex(regex) {
     }
 
     return regex;
-}
-
-async function validateToken(token) {
-    const response = await Axios.post('http://localhost:3000/api/user/verify', {
-        headers: {
-            Authorization: `token ${token}`
-        }
-    })
-    .catch(e => {
-        console.log(e)
-    })
-
-    return true;
-}
-
-function parseUrl(url) {
-    let parsed = url.substring(url.indexOf('=') + 1);
-
-    return parsed;
 }
