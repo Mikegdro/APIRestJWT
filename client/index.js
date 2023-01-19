@@ -33,13 +33,19 @@ $('.sendRegex').on('click', e => {
  * @param { json } form 
  */
 async function login(form) {
+
+    let loginData = {
+        email: form[0].value,
+        password: form[1].value
+    }
+
     try {
         let res = await fetch('http://localhost:3000/api/user/login', {
             method: "POST",
-            body: {
-                email: form[0].value,
-                password: form[1].value
+            headers: {
+                'Content-Type': 'application/json',
             },
+            body: JSON.stringify(loginData),
 
         });
 

@@ -16,7 +16,11 @@ class Communication {
 
         this.socket.onmessage = (event) => {
             let objeto = JSON.parse(event.data);
-            $('.resultado').html(objeto)
+
+            console.log(objeto, objeto.resultado)
+
+            $('.resultado').text(``);
+            
             console.log(objeto)
         };
 
@@ -49,8 +53,8 @@ class Communication {
 
     send(data) {
         const msg = {
-            regex: data[0],
-            ws: this.socket,
+            regex: data[0].value,
+            url: this.socket.url,
         }
         console.log(msg)
         this.socket.send(JSON.stringify(msg));
