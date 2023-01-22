@@ -1,3 +1,5 @@
+import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
+
 class Communication {
     socket = null;
     state = false;
@@ -9,32 +11,33 @@ class Communication {
         this.logout = config.logout;
 
         let serverIP = `ws://${config.ip}:${config.port}`;
-        //WEBSOCKETRESQUEST => https://github.com/theturtle32/WebSocket-Node/blob/cce6d468986dd356a52af5630fd8ed5726ba5b7a/docs/WebSocketRequest.md
-        this.socket = new WebSocketRequest()
+        
+        this.socket = new io(serverIP, {
+            auth: {
+                token: config.token
+            }
+        });
 
-        this.socket.onopen = (e) => {
+        this.socket.on('open', () => {
             this.state = true;
-        };
+            console.log(this.socket)
+        })
 
-        this.socket.onmessage = (event) => {
-            let objeto = JSON.parse(event.data);
+        this.socket.on('message', (msg) => {
+            console.log(msg);
+        })
 
-            console.log(objeto, objeto.resultado)
-
-            $('.resultado').text(``);
-            
-            console.log(objeto)
-        };
-
-        this.socket.onclose = (event) => {
+        this.socket.on('disconnect', (reason) => {
+            //Se puede hacer diferentes casos dependiendo de la razón de la desconexión
             this.state = false;
-            console.log("Disconnected from the server");
+            console.log("Disconnected from the server", reason);
+        });
+
+        this.socket.on("connect_error", (error) => {
+            console.log(error)
+            this.state = false;
             this.logout();
-        };
-
-        this.socket.onerror = (error) => {
-            this.state = false;
-        };
+        });
     }
 
     static get MASTER () {
@@ -54,11 +57,12 @@ class Communication {
     }
 
     send(data) {
+        console.log(data)
         const msg = {
             regex: data[0].value,
         }
 
-        this.socket.send(JSON.stringify(msg));
+        this.socket.emit('regex', msg);
     }
 
     close() {

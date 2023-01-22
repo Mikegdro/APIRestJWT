@@ -13,6 +13,8 @@ $('.login').on('click', e => {
     let form = $('.loginForm').serializeArray();
     login(form);
 });
+
+
 $('.logoutBtn').on('click', e => {
     logout();
 })

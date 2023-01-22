@@ -1,69 +1,65 @@
-var WebSocketServer = require('ws').Server;
-var Axios = require('axios');
-var parser = require('./gramatica');
-var fs = require('fs');
+const createServer = require('http').createServer;
+const Server = require('socket.io').Server;
+const parser = require('./gramatica');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
-var wss = new WebSocketServer({
-    port: 8023,
-    verifyClient: function(info, cb) {
-        var token = info.req.headers.token;
-
-        if(!token) {
-            cb(false, 401, "Unauthorized");
-        } else {
-            jwt.verify(token, `${process.env.TOKEN_SECRET}`, function (err, decoded) {
-                if ( err ) {
-                    cb(false, 401, 'Unauthorized');
-                } else {
-                    info.req.user = decoded;
-                    cb(true);
-                }
-            })
-        }
-    }
-});
 var clients = [];
 
-console.log("Server is Running...");
+const httpServer = createServer();
+const io = new Server(httpServer, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+})
 
-wss.broadcast = function broadcastMsg(msg) {
-    //Descodificamos la comunicación y la parseamos
-    let regex = msg.toString('utf8');
-    regex = JSON.parse(regex);
+io.on('connection', ( socket ) => {
+    let token = socket.handshake.auth.token;
+
+    socket.send('Welcome!');
     
-    //Comprobamos la expresión regular
-    let regexValidity = parseRegex(regex);
+    let client = clients.find(client => client.token === token);
+    if(client === undefined){
+        client = { socket, tries: 5, token: token }
+        clients.push(client);
+    } 
 
-    //Le restamos intentos al usuario y devolvemos un JSON con los datos
-    /**
-     * TODO => BUSCAR MANERA DE HACER QUE ESTO SE EJECUTE DE MANERA ASÍNCRONA CUANDO
-     * LA VALIDEZ DE LA REGEX SE HAYA RESUELTO, NO SE PORQUE, PERO .THEN() NO FUNCIONA
-     * 
-     */
-    client.tries --;
-    client.socket.send(JSON.stringify({
-        resultado: regexValidity,
-        tries: client.tries
-    }));
-};
-
-
-wss.on('connection',  ( conn ) => {
-    let user = conn.upgradeReq.user;
-    ws.send('Welcome!' + user.name);
-    ws.on('message', ( data ) => {
-        console.log(data)
+    socket.on('regex', ( arg ) => {
+        parseRegex(arg)
+            .then( resultado => {
+                client.tries--;
+                socket.send(resultado);
+            }).catch(
+                socket.send(new Error('Invalid Regex'))
+            )
     })
-});
-
-async function parseRegex(regex) {
-    let regexValidity;
+//Middleware para JWT
+}).use((socket, next) => {
+    const token = socket.handshake.auth.token;
+    
+    if(token === undefined) next(new Error('Empty token'))
 
     try {
-        regexValidity = await parser.parse(`Evaluar[${regex.regex}];`)
-    } catch ( err ) {
-        return "Error interno ( 501 )";
+        jwt.verify(token, process.env.TOKEN_SECRET);
+        next();
+    } catch (error) {
+        next(new Error('Bad token'))
     }
+})
 
-    return regex;
+/**
+ * TODO => Arreglar esto para que salte un error léxico que se 
+ * pueda capturar arriba y devolver un mensaje acorde al cliente
+ */
+async function parseRegex(regex) {
+    try {
+        await parser.parse(`Evaluar[${regex.regex}];`);
+    } catch (err) {
+        console.log(err)
+    }
 }
+
+httpServer.listen(8023);
+
+console.log("Server is Running...");

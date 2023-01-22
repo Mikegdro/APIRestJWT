@@ -5,20 +5,18 @@ const mongoose = require('mongoose');
 const User = require('../models/user');
 
 router.post('/login', async (req, res) => {
-    // let correo = JSON.stringify(req.body.email);
-    // const userExists = await User.findOne({email: correo})
-    //     .then( user => {
-    //         console.log(user)
-    //     })
-    //     .catch( err => {
-    //         console.log("err")
-    //     })
-
+    
     const token = jwt.sign({
         name: req.body.name,
         password: req.body.password
     }, process.env.TOKEN_SECRET);
 
+
+    /**                    TO-DO:
+     * Aquí hay que implementar que compruebe el usuario
+     * en la base de datos antes de devolverle un token.
+     * 
+     */
     res.header('auth-token', token).json({
         error: null,
         data: {token},
@@ -28,11 +26,7 @@ router.post('/login', async (req, res) => {
         }
     });
     
-    res.send({
-        body: {
-            error: "User Not Found",
-        }
-    })
+    
 
 });
 
