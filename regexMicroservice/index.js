@@ -44,7 +44,7 @@ io.on('connection', ( socket ) => {
         jwt.verify(token, process.env.TOKEN_SECRET);
         next();
     } catch (error) {
-        next(new Error('Bad token'))
+        next(new Error('Bad token'));
     }
 })
 
@@ -53,11 +53,9 @@ io.on('connection', ( socket ) => {
  * pueda capturar arriba y devolver un mensaje acorde al cliente
  */
 async function parseRegex(regex) {
-    try {
-        await parser.parse(`Evaluar[${regex.regex}];`);
-    } catch (err) {
-        console.log(err)
-    }
+    
+   await parser.parse(`Evaluar[${regex.regex}];`);
+    
 }
 
 httpServer.listen(8023);
