@@ -82,15 +82,20 @@ async function login(form) {
  * @param { json } data 
  */
 async function register(form) {
+
+    let registerData = {
+        email: form[0].value,
+        password: form[1].value
+    }
+
     try {
         let res = await fetch('http://localhost:3000/api/user/register', {
-            method: "GET",
-            body: {
-                name: form[0].value,
-                email: form[1].value,
-                password: form[2].value
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
             },
-
+            
+            body: JSON.stringify(registerData),
         });
 
         let data = await res.json();

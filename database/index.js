@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const initDB = require('./db/mongo');
 require('dotenv').config();
 
 const app = express();
@@ -17,6 +18,9 @@ app.use(cors(corsOptions));
 //============ Rutas ============
 const authRoutes = require("./routes/auth");
 app.use('/api/user', authRoutes);
+
+//========== Iniciamos la conexión con la Base de Datos =======//
+initDB();
 
 //Exponemos el puerto para que escuche
 const PORT = process.env.PORT || 3000;

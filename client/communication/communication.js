@@ -57,7 +57,6 @@ class Communication {
     }
 
     send(data) {
-        console.log(data)
         const msg = {
             regex: data[0].value,
         }
