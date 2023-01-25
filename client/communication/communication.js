@@ -25,7 +25,6 @@ class Communication {
         })
 
         this.socket.on('message', ( msg ) => {
-
             console.log(msg)
             
             let msgType = "success";

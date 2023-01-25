@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose');
 const user = require('../models/user');
 const bcrypt = require('bcryptjs');
 
@@ -12,11 +11,14 @@ const bcrypt = require('bcryptjs');
  * usuario.
  */
 router.post('/login', async (req, res) => {
-    console.log(req.body.email)
+
+    //Buscamos al usuario
     await user.find({email: req.body.email}).exec()
         .then(usuario => {
-        
+            
+            //Comparamos las contraseñas
             if( bcrypt.compareSync(req.body.password, usuario[0].password) ) {
+                
                 let token = createToken(req.body);
 
                 res.header('auth-token', token).json({
@@ -27,6 +29,10 @@ router.post('/login', async (req, res) => {
                         serverPort: process.env.SERVER_PORT
                     }
                 });
+            } else {
+                res.status(401).json({
+                    error: "Unauthorized"
+                })
             }
 
         })
@@ -56,7 +62,6 @@ router.post('/register', async (req, res) => {
         })
 
     //Si existe devolvemos una respuesta temprana para que no cree el usuario
-    //TODO => REFACTORIZA ESTO SIUSPLAU QUE ME SANGRAN LOS OJOS
     if(exists.toLocaleString() == "") {
         //Hasheamos la contraseña
         let password = hashPassword(req.body.password);
@@ -93,6 +98,11 @@ router.post('/register', async (req, res) => {
 
 });
 
+/**
+ * Crea el hash de una contraseña
+ * @param { password } password 
+ * @returns 
+ */
 function hashPassword(password) {
     //Generamos la "Sal" y hasheamos la password
     let salt = bcrypt.genSaltSync(10);

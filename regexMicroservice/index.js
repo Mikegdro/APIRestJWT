@@ -80,6 +80,7 @@ async function parseRegex(regex) {
 
     let parsed = await parser.parse(`Evaluar[${regex.regex}];`);
     
+    
     console.log(parsed)
 
     //return parsed;

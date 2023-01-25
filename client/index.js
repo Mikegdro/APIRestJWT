@@ -53,6 +53,8 @@ async function login(form) {
 
         let data = await res.json();
 
+        console.log(data)
+
         let error = `${data.error}`;
 
         if(error === "null") {
@@ -71,9 +73,17 @@ async function login(form) {
                 msg: eval(buildUI)
             });
 
+        } else {
+
+            buildUI({
+                operation: "msg",
+                type: "error",
+                msg: data.error
+            });
+
         }
          
-    } catch(error) {
+    } catch( error ) {
         console.error(error);
     }
 }

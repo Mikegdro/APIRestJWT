@@ -6,6 +6,9 @@
 %lex
 
 %options case-insensitive
+%{
+	const errores = [];
+%}
 
 %%
 
@@ -30,7 +33,7 @@
 
 <<EOF>>                 return 'EOF';
 
-.                       { return ('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
+.                       { console.log('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);}
 /lex
 
 /* Asociación de operadores y precedencia */
@@ -44,18 +47,18 @@
 %% /* Definición de la gramática */
 
 ini
-	: instrucciones EOF
+	: instrucciones EOF 
 ;
 
 instrucciones
 	: instruccion instrucciones
 	| instruccion
-	| error {  console.log('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
+	| error { errores.push('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
 ;
 
 instruccion
 	: REVALUAR CORIZQ expresion CORDER PTCOMA {
-		 return ('El valor de la expresión es: ' + $3);
+		 return 'El valor de la expresión es: ' + $3;
 	}
 ;
 
@@ -69,3 +72,4 @@ expresion
 	| DECIMAL                       { $$ = Number($1); }
 	| PARIZQ expresion PARDER       { $$ = $2; }
 ;
+
