@@ -5,6 +5,19 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
+.alert {
+  width: 50%;
+  margin: 15px auto;
+}
+.regexForm {
+  width: 80% !important;
+  margin: 0 auto !important; 
+}
+
+.logoutBtn {
+  width: 50%;
+}
+
 .resultado {
   display: none;
 }

@@ -10,6 +10,8 @@ require('dotenv').config();
 //Array de clientes en el que se almacenará información acerca de cada una de las conexiones
 var clients = [];
 
+//
+var workers = [];
 /**
  * Servidores tanto de web socket como http necesarios para la comunicación con la parte de
  * cliente
@@ -46,13 +48,15 @@ io.on('connection', ( socket ) => {
      * @param { arg } object Argumentos de la consulta del usuario
      */
     socket.on('regex', ( arg ) => {
-        parseRegex(arg)
-            .then( resultado => {
-                client.tries--;
-                socket.send(resultado);
-            }).catch(
-                socket.send(new Error('Invalid Regex'))
-            )
+        setTimeout( () => {
+            parseRegex(arg)
+                .then( resultado => {
+                    client.tries--;
+                    socket.send(resultado);
+                }).catch( err => {
+                    socket.send(err)
+                })
+        }, 5000)        
     })
 //Middleware para JWT
 }).use((socket, next) => {
@@ -73,9 +77,12 @@ io.on('connection', ( socket ) => {
  * pueda capturar arriba y devolver un mensaje acorde al cliente
  */
 async function parseRegex(regex) {
+
+    let parsed = await parser.parse(`Evaluar[${regex.regex}];`);
     
-   await parser.parse(`Evaluar[${regex.regex}];`);
-    
+    console.log(parsed)
+
+    //return parsed;
 }
 
 httpServer.listen(8023);

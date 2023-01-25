@@ -4,8 +4,7 @@ const mongoose = require('mongoose');
 const user = require('../models/user');
 const bcrypt = require('bcryptjs');
 
-/** TODO => Al hacer login me ha empezado a fallar el CORS no se porque
- * 
+/** 
  * Ruta de Login , recoge los datos de la request, comprueba la base de datos
  * y le devuelve una repuesta de login.
  * @param { object } req Información de la request del usuario
@@ -13,7 +12,7 @@ const bcrypt = require('bcryptjs');
  * usuario.
  */
 router.post('/login', async (req, res) => {
-    
+    console.log(req.body.email)
     await user.find({email: req.body.email}).exec()
         .then(usuario => {
         
@@ -33,7 +32,7 @@ router.post('/login', async (req, res) => {
         })
         .catch( error => {
             res.json({
-                error: "401 Unauthorized"
+                error: `401 Unauthorized ${error}`
             })
         })
 
@@ -58,10 +57,7 @@ router.post('/register', async (req, res) => {
 
     //Si existe devolvemos una respuesta temprana para que no cree el usuario
     //TODO => REFACTORIZA ESTO SIUSPLAU QUE ME SANGRAN LOS OJOS
-    if(exists.toLocaleString() != "") {
-        res.status(401).send("Sorry, user already exists!");
-    } else {
-        
+    if(exists.toLocaleString() == "") {
         //Hasheamos la contraseña
         let password = hashPassword(req.body.password);
 
@@ -91,9 +87,10 @@ router.post('/register', async (req, res) => {
             .catch( err => {
                 console.log(err)
             })
+    } else {
+        res.status(401).send("Sorry, user already exists!");
     }
 
-    
 });
 
 function hashPassword(password) {

@@ -9,6 +9,7 @@ class Communication {
 
     init(config) {
         this.logout = config.logout;
+        this.msg = config.msg;
 
         let serverIP = `ws://${config.ip}:${config.port}`;
         
@@ -23,8 +24,23 @@ class Communication {
             console.log(this.socket)
         })
 
-        this.socket.on('message', (msg) => {
-            console.log(msg);
+        this.socket.on('message', ( msg ) => {
+
+            console.log(msg)
+            
+            let msgType = "success";
+
+            if (msg.indexOf("Este es un error") != -1) {
+                msgType = "error"
+            }
+
+            this.msg({
+                operation: "msg",
+                msg: msg,
+                type: msgType
+            })
+            
+            this.msg(msg);
         })
 
         this.socket.on('disconnect', (reason) => {

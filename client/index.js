@@ -67,7 +67,8 @@ async function login(form) {
                 ip: data.body.serverIp,
                 port: data.body.serverPort,
                 token: myToken,
-                logout: eval(logout)
+                logout: eval(logout),
+                msg: eval(buildUI)
             });
 
         }
@@ -137,11 +138,32 @@ async function logout() {
  * @param { json } data 
  */
 function buildUI(data) {
+    console.log(data)
     if( data.operation === "login" ) {
+
         $('.container').css("display", "none");
         $('.logout').css("display", "block");
+
     } else if( data.operation === "logout" ) {
+
         $('.container').css("display", "block");
         $('.logout').css("display", "none");
+
+    } else if ( data.operation === "msg" ) {
+
+        if( data.type === "error") {
+
+            $('.alert').removeClass('alert-success');
+            $('.alert').addClass('alert-danger');
+
+        } else if ( data.type === "success" ) {
+
+            $('.alert').removeClass('alert-danger');
+            $('.alert').addClass('alert-success');
+
+        }
+
+        $('.alert').html( data.msg );
+
     }
 }
