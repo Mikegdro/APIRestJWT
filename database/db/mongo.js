@@ -1,17 +1,16 @@
 //Recogemos mongoose
 const mongoose = require('mongoose');
-const user = require('../models/user');
 require('dotenv').config;
 
 
 const initDB = async function() {
     
     //Uri para la conexión a BBDD 
-    const uri = `mongodb://${process.env.DBUSER}:${process.env.DBPASSWORD}@127.0.0.1:1888/?authMechanism=DEFAULT`;
+    const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/?authMechanism=DEFAULT`;
 
     //Conexión a mongo con mongoose
     mongoose.connect( uri, {
-        dbName: process.env.DBNAME,
+        dbName: process.env.DB_NAME,
         useNewUrlParser: true,
         useUnifiedTopology: true,
     }).then(() => {
@@ -19,8 +18,6 @@ const initDB = async function() {
     }).catch( err => {
         console.error("Algo ha fallado al conectaro con la base de datos de mongo" + err);
     });
-
-    
 }
 
 module.exports = initDB;

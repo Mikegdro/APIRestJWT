@@ -1,0 +1,57 @@
+version: "2"
+
+networks:
+  db:
+    driver: bridge
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    networks:
+      - db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongoadmin
+      MONGO_INITDB_ROOT_PASSWORD: secret
+    ports:
+      - "1888:27017"
+
+  nodeAuth:
+    image: "node:8"
+    networks:
+      - db
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./database:/home/node/app
+    ports:
+      - "3000:3000"
+    command: "npm start"
+    depends_on:
+      - mongo
+    
+  nodeApp:
+    image: "node:8"
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./regexMicroservice:/home/node/app
+    ports:
+      - "8023:8023"
+    command: "npm start"
+
+  proxy:
+    image: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./client:/usr/share/nginx/html
+      - ./default.conf:/etc/nginx/conf.d/nginx.conf
+    environment:
+      - NGINX_HOST=Mikelangelo.com
+      - NGINX_PORT=80
+    
