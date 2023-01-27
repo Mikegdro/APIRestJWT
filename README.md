@@ -1,40 +1,20 @@
 # APIRestJWT
-API Rest utilizando Json Web Tokens para la autentificación de usuarios, con MongoDB y Web Sockets.
 
----------------- CLIENT ---------------------------<br/>
-El cliente va a hacer uso de HTML, CSS y JS con JQuery, va a mostrar un formulario de 
-login, register y logout, con el que por medio de métodos asíncronos y la API Fetch de JS
-podremos recoger los datos de la Base de datos (database), y montar la información nueva en
-pantalla dependiendo de la respuesta del servidor de base de datos.
+---------------- Versión 1 ---------------------------<br/>
+La versión 1 implementa 3 servidores, uno de autenticación, que usa MongoDB con mongoose, este devuelve un JSON Web Token al usuario que se ha autenticado
+y con este token se pueden hacer consultas al segundo servidor, este servidor implemente un servicio de Jison, el cual parsea la entrada y devuelve si la expresión
+es matemática y esta correctamente. La conexión al servidor de micro-servicios se hace mediante un Web Socket haciendo uso de la librería Socket.io para mandar una 
+cabecera con el token para que el servidor de WebSocket autorice apropiadamente la conexión. La conexión con el servidor de autenticación se realiza mediante express y 
+protocolos HTTP. El 3 servidor es un proxy, que redigirá las peticiones al servidor correspondiente.
 
-    · Respuesta 1 -> Error: Mostrar el tipo de error en el formulario para que el 
-    usuario pueda volver a intentarlo
+        ----------------- TO-DO ----------------<br/>
+            · Proxy
+            · Docker-compose
+            · Workers
+            · Cortar la conexión con el usuario cuando lleve 5 consultas
 
-    · Respuesta 2 -> Ok: En caso de que se haya autentificado al usuario, deberemos guardar
-    los datos y el token de manera segura, así como una IP de conexión con un servidor 
-    al cual nos conectaremos a través de Web Sockets, una vez realizada la conexión se 
-    renderizará la interfaz de introducción de expresiones regulares, con la cual el usuario
-    podrá interactuar para mandar a este servidor esta expresión regular para que sea evaluada.
-
-    · Interfaz 1 -> Login
-    · Interfaz 2 -> regex
-
------------------ Database ---------------------<br/>
-Servidor de base de datos, contará con MongoDB y una pequeña API por la que hacer consultas, 
-este servidor será el encargado de crear JWT y compartirá una clave con el servidor de REGEX
-con la cual podrán crear y comprobar los tokens que les llegan. 
-
-    · Recibe request, consulta la bbdd, devuelve un JSON, con un mensaje de error/token
-
-
------------------ Servidor REGEX ----------------<br/>
-Este servidor está esperando una conexión por web socket, una vez esta se realice, tendrá que recibir un JSON, con una expresión regular y un JWT, tras comprobar el JWT este tendrá que ejecutar un script que sea capaz de comprobar una Expresión Regular de manera RECURSIVA y que devolverá al usuario una respues de si es válido o no. Tendrá una estructura de datos
-interna con los tokens que le han pasado así como un valor asociado que nos dirá la cantidad
-de veces que ese token ha hecho una petición siendo como máximo 5, en caso de llegar a ese máximo se le revocará el token al usuario y cortará la conexión del web socket.
-
-    · Recibe request, comprueba JWT, Ejecuta expresión regular y devuelve respuesta JSON con el resultado de la consulta, si se han realizado 5 o más consultas, corta la conexión con ese usuario.
-
-
------------------ TO-DO ----------------<br/>
-    · Comprobación de usuarios
-    · Cortar la conexión con el usuario cuando lleve 5 consultas
+---------------- Versión 2 ---------------------------<br/>
+La versión 2 implementa también 3 servidores, con la diferencia que el servidor de autenticación en vez de usar una base de datos y MongoDB, le devolverá al cliente
+un certificado digital, este será instalado en el navegador del cliente, por lo que una vez se conecten los usuarios, aparte de recibir un web token también deberemos de 
+comprobar que la petición está siendo realizada por un navegador en el cual nuestra Autoridad Certificadora confía. Para varíar un poco la cosa en el cliente, se usará 
+VueJs para el front-end y TailwindCSS usando Vite como empaquetador del proyecto ( Deseadme suerte con eso ).
