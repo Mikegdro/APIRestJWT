@@ -1,20 +1,27 @@
 # APIRestJWT
+API Rest utilizando Json Web Tokens para la autentificación de usuarios, con MongoDB y Web Sockets.
 
----------------- Versión 1 ---------------------------<br/>
-La versión 1 implementa 3 servidores, uno de autenticación, que usa MongoDB con mongoose, este devuelve un JSON Web Token al usuario que se ha autenticado
-y con este token se pueden hacer consultas al segundo servidor, este servidor implemente un servicio de Jison, el cual parsea la entrada y devuelve si la expresión
-es matemática y esta correctamente. La conexión al servidor de micro-servicios se hace mediante un Web Socket haciendo uso de la librería Socket.io para mandar una 
-cabecera con el token para que el servidor de WebSocket autorice apropiadamente la conexión. La conexión con el servidor de autenticación se realiza mediante express y 
-protocolos HTTP. El 3 servidor es un proxy, que redigirá las peticiones al servidor correspondiente.
+---------------- CLIENT ---------------------------<br/>
+El cliente consta de su aplicación, con la que podrá hacer login, logout, y mandar expresiones regulares una vez este logeado.
 
-        ----------------- TO-DO ----------------<br/>
-            · Proxy
-            · Docker-compose
-            · Workers
-            · Cortar la conexión con el usuario cuando lleve 5 consultas
+La interfaz esta hecha con JQuery y Bootstrap.
 
----------------- Versión 2 ---------------------------<br/>
-La versión 2 implementa también 3 servidores, con la diferencia que el servidor de autenticación en vez de usar una base de datos y MongoDB, le devolverá al cliente
-un certificado digital, este será instalado en el navegador del cliente, por lo que una vez se conecten los usuarios, aparte de recibir un web token también deberemos de 
-comprobar que la petición está siendo realizada por un navegador en el cual nuestra Autoridad Certificadora confía. Para varíar un poco la cosa en el cliente, se usará 
-VueJs para el front-end y TailwindCSS usando Vite como empaquetador del proyecto ( Deseadme suerte con eso ).
+Una vez recibe el token del servidor de autenticación, se conecta automáticamente a través de WebSocket al servidor de expresiones 
+regulares, para esto he hecho uso de la biblioteca Socket.io, que monta un servidor http encima del WebSocket para poder mandar
+cabeceras con información de autenticación las cuales en este caso se necesitaban.
+
+----------------- Database ---------------------<br/>
+Servidor encargado de la base de datos mongodb, de la autenticación de usuarios, y de la expedición de token JWT para que el usuario
+pueda acceder al resto de herramientas de nuestra aplicación.
+
+
+----------------- Servidor REGEX ----------------<br/>
+Servidor WebSocket, realizado con la biblioteca Socket.io, que recibe por cabeceras el token del usuario y este corrobora el token y le da 
+acceso al usuario a 5 intentos.
+
+----------------- POR HACER ------------------------<br/>
+ · Que reste intentos y desconecte al usuario cuando los consuma
+ · La respuesta Jison con los errores bien formateada
+ · Servidor Proxy
+ · Docker compose que monte automáticamente los servicios
+ · Geolocalización
