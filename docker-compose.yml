@@ -1,25 +1,23 @@
 version: "2"
 
 networks:
-  db:
+  backend:
     driver: bridge
 
 services:
   mongo:
     image: mongo
     restart: always
-    networks:
-      - db
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongoadmin
       MONGO_INITDB_ROOT_PASSWORD: secret
-    ports:
-      - "1888:27017"
+    volumes:
+      - "./mongo/data:/data/db"
+    networks:
+      - backend
 
   nodeAuth:
-    image: "node:8"
-    networks:
-      - db
+    image: "node:latest"
     user: "node"
     working_dir: /home/node/app
     environment:
@@ -31,9 +29,11 @@ services:
     command: "npm start"
     depends_on:
       - mongo
+    networks:
+      - backend
     
   nodeApp:
-    image: "node:8"
+    image: "node:latest"
     user: "node"
     working_dir: /home/node/app
     environment:
@@ -45,7 +45,7 @@ services:
     command: "npm start"
 
   proxy:
-    image: nginx
+    image: "nginx:latest"
     ports:
       - "8080:80"
     volumes:

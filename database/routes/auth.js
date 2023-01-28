@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
-const mongsoose = require('mongoose');
 const user = require('../models/user');
 const bcrypt = require('bcryptjs');
 
@@ -46,15 +45,15 @@ router.post('/login', async (req, res) => {
  * usuario.
  */
 router.post('/register', async (req, res) => {
+    console.log(req.body.email)
     //Comprobamos si existe un usuario con ese mismo email
     let exists = await user.find({email:req.body.email}).exec()
-        .then( usr => {
-            return usr;
-        })
         .catch( err => {
             console.log(err)
         })
 
+    console.log(exists)
+    
     //Si existe devolvemos una respuesta temprana para que no cree el usuario
     //TODO => REFACTORIZA ESTO SIUSPLAU QUE ME SANGRAN LOS OJOS
     if(exists.toLocaleString() == "") {
@@ -67,6 +66,8 @@ router.post('/register', async (req, res) => {
             password: password
         })
 
+        console.log(usuario)
+
         //Guardamos el usuario
         usuario.save()
             .then( usr => {
@@ -74,15 +75,7 @@ router.post('/register', async (req, res) => {
 
                 let token = createToken(req.body);
 
-                res.header('auth-token', token).json({
-                    error: null,
-                    data: {token},
-                    body: {
-                        serverIp: process.env.SERVER_IP,
-                        serverPort: process.env.SERVER_PORT
-                    }
-                });
-
+                logged(res, token);
             })
             .catch( err => {
                 console.log(err)
@@ -92,6 +85,17 @@ router.post('/register', async (req, res) => {
     }
 
 });
+
+function logged(res, token) {
+    res.header('auth-token', token).json({
+        error: null,
+        data: {token},
+        body: {
+            serverIp: process.env.SERVER_IP,
+            serverPort: process.env.SERVER_PORT
+        }
+    });
+}
 
 function hashPassword(password) {
     //Generamos la "Sal" y hasheamos la password
