@@ -1,27 +1,29 @@
 # APIRestJWT
 API Rest utilizando Json Web Tokens para la autentificación de usuarios, con MongoDB y Web Sockets.
 
+---------------- Instalación ---------------------------<br/>
+Usar el comando npm install en las carpetas regexMicroservice y database para instalar las respectivas dependencias. Una vez hecho esto se puede usar el comando docker-compose up para levantar los contenedores. 
+
 ---------------- CLIENT ---------------------------<br/>
-El cliente consta de su aplicación, con la que podrá hacer login, logout, y mandar expresiones regulares una vez este logeado.
+Aplicación front-end servida por un servidor web/proxy, esta aplicación conecta al usuario con ambas lógicas de negocio, la base de datos con el servicio de autenticación y el servicio de expresiones regulares.
 
-La interfaz esta hecha con JQuery y Bootstrap.
+Tecnologías --> JQuery, Bootstrap, SwiperJS
 
-Una vez recibe el token del servidor de autenticación, se conecta automáticamente a través de WebSocket al servidor de expresiones 
-regulares, para esto he hecho uso de la biblioteca Socket.io, que monta un servidor http encima del WebSocket para poder mandar
-cabeceras con información de autenticación las cuales en este caso se necesitaban.
+Ruta / : http://localhost:80/
 
 ----------------- Database ---------------------<br/>
-Servidor encargado de la base de datos mongodb, de la autenticación de usuarios, y de la expedición de token JWT para que el usuario
-pueda acceder al resto de herramientas de nuestra aplicación.
+Servidor al que se accede através de un proxy, este tiene una red interna en la cual se encuentra la base de datos y es el único con las credenciales de acceso a dicha base de datos. 
 
+Tecnologías --> NodeJS, MongoDB, Mongoose, JsonWebToken
+
+Rutas_proxy: {
+    login: http://localhost:80/api/user/auth/login,
+    logout: http://localhost:80/api/user/auth/logout
+}
 
 ----------------- Servidor REGEX ----------------<br/>
-Servidor WebSocket, realizado con la biblioteca Socket.io, que recibe por cabeceras el token del usuario y este corrobora el token y le da 
-acceso al usuario a 5 intentos.
+Servidor de WebSocket con la lógica del servicio de expresiones regulares, solo se puede acceder a el a través de un proxy. Tiene una cola implementada y es capaz de procesar 4 request a la vez por lo que las que vienen de más las mete en una cola para procesarlas más tarde.
 
------------------ POR HACER ------------------------<br/>
- · Que reste intentos y desconecte al usuario cuando los consuma
- · La respuesta Jison con los errores bien formateada
- · Servidor Proxy
- · Docker compose que monte automáticamente los servicios
- · Geolocalización
+Rutas_proxy: {
+    regex: http://localhost:80/regex
+}
