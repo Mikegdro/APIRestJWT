@@ -7,6 +7,9 @@
 
 %options case-insensitive
 
+%{
+	const err = [];
+%}
 %%
 
 "Evaluar"           return 'REVALUAR';
@@ -28,9 +31,10 @@
 [0-9]+("."[0-9]+)?\b    return 'DECIMAL';
 [0-9]+\b                return 'ENTERO';
 
-<<EOF>>                 return 'EOF';
+.                       { err.push ('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);  }
 
-.                       { return ('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
+<<EOF>>                 { console.log(errs) };
+
 /lex
 
 /* Asociación de operadores y precedencia */

@@ -12,28 +12,23 @@ const bcrypt = require('bcryptjs');
  */
 router.post('/login', async (req, res) => {
     console.log(req.body.email)
-    await user.find({email: req.body.email}).exec()
-        .then(usuario => {
+    // await user.find({email: req.body.email}).exec()
+    //     .then(usuario => {
         
-            if( bcrypt.compareSync(req.body.password, usuario[0].password) ) {
-                let token = createToken(req.body);
+    //         if( bcrypt.compareSync(req.body.password, usuario[0].password) ) {
+    //             let token = createToken(req.body);
 
-                res.header('auth-token', token).json({
-                    error: null,
-                    data: {token},
-                    body: {
-                        serverIp: process.env.SERVER_IP,
-                        serverPort: process.env.SERVER_PORT
-                    }
-                });
-            }
+    //             logged(res, token);
+    //         }
 
-        })
-        .catch( error => {
-            res.json({
-                error: `401 Unauthorized ${error}`
-            })
-        })
+    //     })
+    //     .catch( error => {
+    //         res.json({
+    //             error: `401 Unauthorized ${error}`
+    //         })
+    //     })
+
+    logged(res, createToken(req.body));
 
 });
 
@@ -86,6 +81,12 @@ router.post('/register', async (req, res) => {
 
 });
 
+/**
+ * Le pasamos la respuesta y el token para que construya el JSON
+ * de log que le tiene que llegar al usuario.
+ * @param {Response} res 
+ * @param {jwt} token 
+ */
 function logged(res, token) {
     res.header('auth-token', token).json({
         error: null,
@@ -97,6 +98,11 @@ function logged(res, token) {
     });
 }
 
+/**
+ * Le pasamos la contraseña y nos devuelve el hash a almacenar.
+ * @param {string} password 
+ * @returns 
+ */
 function hashPassword(password) {
     //Generamos la "Sal" y hasheamos la password
     let salt = bcrypt.genSaltSync(10);
