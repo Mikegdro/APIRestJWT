@@ -16,9 +16,9 @@ Servidor al que se accede através de un proxy, este tiene una red interna en la
 
 Tecnologías --> NodeJS, MongoDB, Mongoose, JsonWebToken
 
-Rutas_proxy: {
-    login: http://localhost:80/api/user/auth/login,
-    logout: http://localhost:80/api/user/auth/logout
+Rutas_proxy: {<br/>
+    login: http://localhost:80/api/user/auth/login,<br/>
+    logout: http://localhost:80/api/user/auth/logout<br/>
 }
 
 ----------------- Servidor REGEX ----------------<br/>
