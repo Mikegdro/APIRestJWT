@@ -7,7 +7,7 @@ Usar el comando npm install en las carpetas regexMicroservice y database para in
 ---------------- CLIENT ---------------------------<br/>
 Aplicación front-end servida por un servidor web/proxy, esta aplicación conecta al usuario con ambas lógicas de negocio, la base de datos con el servicio de autenticación y el servicio de expresiones regulares.
 
-Tecnologías --> JQuery, Bootstrap, SwiperJS
+Tecnologías --> JQuery, Bootstrap, SwiperJS, Socket.io
 
 Ruta / : http://localhost:80/
 
@@ -23,6 +23,8 @@ Rutas_proxy: {<br/>
 
 ----------------- Servidor REGEX ----------------<br/>
 Servidor de WebSocket con la lógica del servicio de expresiones regulares, solo se puede acceder a el a través de un proxy. Tiene una cola implementada y es capaz de procesar 4 request a la vez por lo que las que vienen de más las mete en una cola para procesarlas más tarde.
+
+Tecnologías --> Jison/lex, Socket.io, JS Workers
 
 Rutas_proxy: {<br/>
     &nbsp;regex: http://localhost:80/regex<br/>
