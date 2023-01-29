@@ -7,10 +7,12 @@
 
 %options case-insensitive
 
+
+%%
+
 %{
 	const err = [];
 %}
-%%
 
 "Evaluar"           return 'REVALUAR';
 ";"                 return 'PTCOMA';
@@ -31,9 +33,9 @@
 [0-9]+("."[0-9]+)?\b    return 'DECIMAL';
 [0-9]+\b                return 'ENTERO';
 
-.                       { err.push ('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);  }
+.                       { err.push ('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); console.log(err) }
 
-<<EOF>>                 { console.log(errs) };
+<<EOF>>                 { console.log(err) };
 
 /lex
 

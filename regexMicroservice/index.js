@@ -3,15 +3,18 @@
  */
 const createServer = require('http').createServer;
 const Server = require('socket.io').Server;
-const parser = require('./gramatica');
 const jwt = require('jsonwebtoken');
+const { parse } = require('path');
 require('dotenv').config();
 
 //Array de clientes en el que se almacenará información acerca de cada una de las conexiones
 var clients = [];
 
-//
-var workers = [];
+//Workers disponibles para trabajar
+var availableWorkers = 4;
+
+//Tareas por hacer, aquí se almacenarán las tareas en formato pila para cuando los workers estén disponibles
+var tasks = [];
 /**
  * Servidores tanto de web socket como http necesarios para la comunicación con la parte de
  * cliente
@@ -48,15 +51,10 @@ io.on('connection', ( socket ) => {
      * @param { arg } object Argumentos de la consulta del usuario
      */
     socket.on('regex', ( arg ) => {
-        setTimeout( () => {
-            parseRegex(arg)
-                .then( resultado => {
-                    client.tries--;
-                    socket.send(resultado);
-                }).catch( err => {
-                    socket.send(err)
-                })
-        }, 5000)        
+        
+        //Llamamos a la función que delega el trabajo
+        workDelegator(arg, client);
+        
     })
 //Middleware para JWT
 }).use((socket, next) => {
@@ -73,16 +71,36 @@ io.on('connection', ( socket ) => {
 })
 
 /**
- * TODO => Arreglar esto para que salte un error léxico que se 
- * pueda capturar arriba y devolver un mensaje acorde al cliente
+ * Función recursiva que se llama a si misma al acabar una tarea para limpiar
+ * la lista de tareas pendientes
+ * @param {object} arg Argumentos de la expresión regular
+ * @param {object} client Socket del cliente para devolverle una respuesta
  */
-async function parseRegex(regex) {
+async function workDelegator(arg, client) {
 
-    let parsed = await parser.parse(`Evaluar[${regex.regex}];`);
+    if(availableWorkers > 0) {
+        //Creamos un worker
+        var myWorker = new Worker("./parser/parser.js");
+
+        myWorker.onmessage = function(event) {
+            console.log(event.data);
+        }
+
+        //Restamos uno a la cantidad de workers disponibles
+
+        //Añadimos el evento de respuesta del worker
+
+        //Liberamos el worker si no hay más tareas disponibles
+
+        //Devolvemos respuesta al usuario
+
+
+    } else {
+        //Añadimos la expresión regular y el usuario al <map> de tareas
+
+    }
+
     
-    console.log(parsed)
-
-    //return parsed;
 }
 
 httpServer.listen(8023);
