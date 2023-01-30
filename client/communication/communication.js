@@ -25,18 +25,16 @@ class Communication {
         })
 
         this.socket.on('message', ( msg ) => {
-
-            console.log(msg)
             
             let msgType = "success";
 
-            if (msg.indexOf("Este es un error") != -1) {
-                msgType = "error"
+            if(msg.msg.indexOf("Este es un error") != -1) {
+                msgType = "error";
             }
 
             this.msg({
                 operation: "msg",
-                msg: msg,
+                msg: msg.msg,
                 type: msgType
             })
             

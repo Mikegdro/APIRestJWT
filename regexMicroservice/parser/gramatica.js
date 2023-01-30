@@ -88,7 +88,7 @@ case 4:
 break;
 case 5:
 
-		 return ('El valor de la expresión es: ' + $$[$0-2]);
+		 console.log ('El valor de la expresión es: ' + $$[$0-2]);
 	
 break;
 case 6:
@@ -691,46 +691,42 @@ options: {"case-insensitive":true},
 performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
-case 0:
-	const err = [];
-
+case 0:return 7;
 break;
-case 1:return 7;
+case 1:return 11;
 break;
-case 2:return 11;
+case 2:return 18;
 break;
-case 3:return 18;
+case 3:return 19;
 break;
-case 4:return 19;
+case 4:return 8;
 break;
-case 5:return 8;
+case 5:return 10;
 break;
-case 6:return 10;
+case 6:return 13;
 break;
-case 7:return 13;
+case 7:return 12;
 break;
-case 8:return 12;
+case 8:return 14;
 break;
-case 9:return 14;
+case 9:return 15;
 break;
-case 10:return 15;
+case 10:
 break;
 case 11:
 break;
-case 12:
+case 12:return 17;
 break;
-case 13:return 17;
+case 13:return 16;
 break;
-case 14:return 16;
+case 14: console.log ('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column); 
 break;
-case 15: err.push ('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column); console.log(err) 
-break;
-case 16: console.log(err) 
+case 15:return 5;
 break;
 }
 },
-rules: [/^(?:)/i,/^(?:Evaluar\b)/i,/^(?:;)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:\/)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:[0-9]+\b)/i,/^(?:.)/i,/^(?:$)/i],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],"inclusive":true}}
+rules: [/^(?:Evaluar\b)/i,/^(?:;)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:\/)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:[0-9]+\b)/i,/^(?:.)/i,/^(?:$)/i],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],"inclusive":true}}
 });
 return lexer;
 })();

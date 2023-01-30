@@ -4,7 +4,8 @@
 const createServer = require('http').createServer;
 const Server = require('socket.io').Server;
 const jwt = require('jsonwebtoken');
-const { parse } = require('path');
+const { isErrored } = require('stream');
+const worker = require('worker_threads');
 require('dotenv').config();
 
 //Array de clientes en el que se almacenará información acerca de cada una de las conexiones
@@ -15,6 +16,7 @@ var availableWorkers = 4;
 
 //Tareas por hacer, aquí se almacenarán las tareas en formato pila para cuando los workers estén disponibles
 var tasks = [];
+
 /**
  * Servidores tanto de web socket como http necesarios para la comunicación con la parte de
  * cliente
@@ -37,7 +39,10 @@ const io = new Server(httpServer, {
 io.on('connection', ( socket ) => {
     let token = socket.handshake.auth.token;
 
-    socket.send('Welcome!');
+    socket.send({
+        error: null,
+        msg: "Welcome!"
+    });
     
     let client = clients.find(client => client.token === token);
     if(client === undefined){
@@ -51,10 +56,11 @@ io.on('connection', ( socket ) => {
      * @param { arg } object Argumentos de la consulta del usuario
      */
     socket.on('regex', ( arg ) => {
-        
-        //Llamamos a la función que delega el trabajo
-        workDelegator(arg, client);
-        
+        //Si estamos en el hilo principal, delegamos el trabajo a otro worker
+        if(worker.isMainThread) {
+            workDelegator(arg, client);
+        }
+   
     })
 //Middleware para JWT
 }).use((socket, next) => {
@@ -71,36 +77,48 @@ io.on('connection', ( socket ) => {
 })
 
 /**
- * Función recursiva que se llama a si misma al acabar una tarea para limpiar
- * la lista de tareas pendientes
+ * Función que delega el trabajo a workers
  * @param {object} arg Argumentos de la expresión regular
  * @param {object} client Socket del cliente para devolverle una respuesta
  */
 async function workDelegator(arg, client) {
-
+    
     if(availableWorkers > 0) {
-        //Creamos un worker
-        var myWorker = new Worker("./parser/parser.js");
+        //Creamos una promesa que se encargará de crear el worker y ejecutar el trabajo
+        const currentWorker = new worker.Worker("./parser/parser.js", {
+            workerData: arg.regex
+        })
 
-        myWorker.onmessage = function(event) {
-            console.log(event.data);
-        }
+        currentWorker.on('message', (msg) => {
+            client.socket.send({
+                error: null,
+                msg: msg
+            })
+        });
+
+        currentWorker.on('error', (error) => {
+            client.socket.send({
+                error: null,
+                msg: error
+            })
+        });
+
+        currentWorker.on('exit', code => {
+            if (code !== 0)
+                new Error(`Worker stopped with exit code ${code}`);
+        });
 
         //Restamos uno a la cantidad de workers disponibles
-
-        //Añadimos el evento de respuesta del worker
-
-        //Liberamos el worker si no hay más tareas disponibles
-
-        //Devolvemos respuesta al usuario
-
+        availableWorkers--;
 
     } else {
         //Añadimos la expresión regular y el usuario al <map> de tareas
-
+        tasks.push({
+            client: client.token,
+            regex: regex
+        });
     }
 
-    
 }
 
 httpServer.listen(8023);

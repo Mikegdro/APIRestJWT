@@ -10,9 +10,8 @@
 
 %%
 
-%{
-	const err = [];
-%}
+
+
 
 "Evaluar"           return 'REVALUAR';
 ";"                 return 'PTCOMA';
@@ -33,9 +32,9 @@
 [0-9]+("."[0-9]+)?\b    return 'DECIMAL';
 [0-9]+\b                return 'ENTERO';
 
-.                       { err.push ('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); console.log(err) }
+.                       { console.log ('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
 
-<<EOF>>                 { console.log(err) };
+<<EOF>>                 return 'EOF';
 
 /lex
 
@@ -61,7 +60,7 @@ instrucciones
 
 instruccion
 	: REVALUAR CORIZQ expresion CORDER PTCOMA {
-		 return ('El valor de la expresión es: ' + $3);
+		 console.log ('El valor de la expresión es: ' + $3);
 	}
 ;
 
