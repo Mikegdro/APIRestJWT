@@ -21,7 +21,6 @@ class Communication {
 
         this.socket.on('open', () => {
             this.state = true;
-            console.log(this.socket)
         })
 
         this.socket.on('message', ( msg ) => {

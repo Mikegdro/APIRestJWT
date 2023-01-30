@@ -4,7 +4,6 @@
 const createServer = require('http').createServer;
 const Server = require('socket.io').Server;
 const jwt = require('jsonwebtoken');
-const { isErrored } = require('stream');
 const worker = require('worker_threads');
 require('dotenv').config();
 
