@@ -12,23 +12,21 @@ const bcrypt = require('bcryptjs');
  */
 router.post('/login', async (req, res) => {
     console.log(req.body.email)
-    // await user.find({email: req.body.email}).exec()
-    //     .then(usuario => {
+    await user.find({email: req.body.email}).exec()
+        .then(usuario => {
         
-    //         if( bcrypt.compareSync(req.body.password, usuario[0].password) ) {
-    //             let token = createToken(req.body);
+            if( bcrypt.compareSync(req.body.password, usuario[0].password) ) {
+                let token = createToken(req.body);
 
-    //             logged(res, token);
-    //         }
+                logged(res, token);
+            }
 
-    //     })
-    //     .catch( error => {
-    //         res.json({
-    //             error: `401 Unauthorized ${error}`
-    //         })
-    //     })
-
-    logged(res, createToken(req.body));
+        })
+        .catch( error => {
+            res.json({
+                error: `401 Unauthorized ${error}`
+            })
+        })
 
 });
 

@@ -24,6 +24,7 @@ initDB();
 
 //Exponemos el puerto para que escuche
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
   console.log(`El servidor está inicializado en el puerto ${PORT}`);
 });

@@ -47,10 +47,13 @@ services:
   proxy:
     image: "nginx:latest"
     ports:
-      - "8080:80"
+      - "8080:443"
     volumes:
       - ./client:/usr/share/nginx/html
       - ./default.conf:/etc/nginx/conf.d/nginx.conf
+      - ./certificates/user/ca.crt:/etc/nginx/client_certs/ca.crt
+      - ./certificates/server/server.crt:/etc/nginx/server_certs/server.crt
+      - ./certificates/server/server.key:/etc/nginx/server_certs/server.key
     environment:
       - NGINX_HOST=Mikelangelo.com
       - NGINX_PORT=80
