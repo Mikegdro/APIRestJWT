@@ -27,6 +27,8 @@ class Communication {
             
             let msgType = "success";
 
+            console.log(msg)
+
             if(msg.msg.indexOf("Este es un error") != -1) {
                 msgType = "error";
             }

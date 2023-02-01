@@ -80,11 +80,13 @@ io.on('connection', ( socket ) => {
  * @param {object} arg Argumentos de la expresión regular
  * @param {object} client Socket del cliente para devolverle una respuesta
  */
-async function workDelegator(arg, client) {
+async function workDelegator(arg, client, oldWorker) {
     
-    if(availableWorkers > 0) {
+    console.log(availableWorkers)
+
+    if(availableWorkers > 0 || oldWorker != undefined) {
         //Creamos una promesa que se encargará de crear el worker y ejecutar el trabajo
-        const currentWorker = new worker.Worker("./parser/parser.js", {
+        const currentWorker = oldWorker || new worker.Worker("./parser/parser.js", {
             workerData: arg.regex
         })
 
@@ -96,7 +98,7 @@ async function workDelegator(arg, client) {
 
             if(tasks.length > 0) {
                 let task = tasks.pop();
-                workDelegator(task.regex, task.client);
+                workDelegator(task.regex, task.client, currentWorker);
             } else {
                 availableWorkers++;
                 currentWorker.terminate();
@@ -111,7 +113,7 @@ async function workDelegator(arg, client) {
 
             if(tasks.length > 0) {
                 let task = tasks.pop();
-                workDelegator(task.regex, task.client);
+                workDelegator(task.regex, task.client, currentWorker);
             } else {
                 availableWorkers++;
                 currentWorker.terminate();
@@ -134,6 +136,8 @@ async function workDelegator(arg, client) {
         });
     }
 
+
+    console.log(availableWorkers)
 }
 
 httpServer.listen(8023);

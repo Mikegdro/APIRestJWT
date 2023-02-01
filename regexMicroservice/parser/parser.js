@@ -16,7 +16,6 @@ async function parseRegex (regex) {
         }
         
     })
-    
     return captures.stdout;
 }
 
