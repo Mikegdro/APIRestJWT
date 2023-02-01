@@ -7,7 +7,7 @@ Usar el comando npm install en las carpetas regexMicroservice y database para in
 ---------------- CLIENT ---------------------------<br/>
 Aplicación front-end servida por un servidor web/proxy, esta aplicación conecta al usuario con ambas lógicas de negocio, la base de datos con el servicio de autenticación y el servicio de expresiones regulares.
 
-Tecnologías --> JQuery, Bootstrap, SwiperJS, Socket.io
+    JQuery, Bootstrap, SwiperJS, Socket.io
 
 Ruta / : http://localhost:80/
 
