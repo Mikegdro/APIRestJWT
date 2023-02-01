@@ -22,7 +22,6 @@ servidor. <br/>
 
 Rutas_proxy: {<br/>
    
-
     &nbsp;login: http://localhost:80/api/user/auth/login,<br/>
     &nbsp;logout: http://localhost:80/api/user/auth/logout<br/>
 }
