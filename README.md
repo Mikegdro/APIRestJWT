@@ -14,10 +14,12 @@ Ruta / : http://localhost:80/
 ----------------- Database ---------------------<br/>
 Servidor al que se accede através de un proxy, este tiene una red interna en la cual se encuentra la base de datos y es el único con las credenciales de acceso a dicha base de datos. 
 
-Tecnologías --> NodeJS, MongoDB, Mongoose, JsonWebToken, Nginx
+
+    NodeJS, MongoDB, Mongoose, JsonWebToken, Nginx
 
 Actualización 1/2/2023: Ahora las rutas están protegidas por un certificado que se ha de instalar en el navegador, sin ese certificado no se puede acceder al
 servidor. <br/>
+
 Rutas_proxy: {<br/>
    
 
