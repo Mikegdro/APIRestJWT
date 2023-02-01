@@ -21,7 +21,7 @@ Actualización 1/2/2023: Ahora las rutas están protegidas por un certificado qu
 servidor. <br/>
 
 Rutas_proxy: {<br/>
-   
+
     &nbsp;login: http://localhost:80/api/user/auth/login,<br/>
     &nbsp;logout: http://localhost:80/api/user/auth/logout<br/>
 }
@@ -32,5 +32,6 @@ Servidor de WebSocket con la lógica del servicio de expresiones regulares, solo
 Tecnologías --> Jison/lex, Socket.io, JS Workers
 
 Rutas_proxy: {<br/>
+
     &nbsp;regex: http://localhost:80/regex<br/>
 }
