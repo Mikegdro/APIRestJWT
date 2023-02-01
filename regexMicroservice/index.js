@@ -93,6 +93,14 @@ async function workDelegator(arg, client) {
                 error: null,
                 msg: msg
             })
+
+            if(tasks.length > 0) {
+                let task = tasks.pop();
+                workDelegator(task.regex, task.client);
+            } else {
+                availableWorkers++;
+                currentWorker.terminate();
+            }
         });
 
         currentWorker.on('error', (error) => {
@@ -100,6 +108,14 @@ async function workDelegator(arg, client) {
                 error: null,
                 msg: error
             })
+
+            if(tasks.length > 0) {
+                let task = tasks.pop();
+                workDelegator(task.regex, task.client);
+            } else {
+                availableWorkers++;
+                currentWorker.terminate();
+            }
         });
 
         currentWorker.on('exit', code => {
@@ -113,7 +129,7 @@ async function workDelegator(arg, client) {
     } else {
         //Añadimos la expresión regular y el usuario al <map> de tareas
         tasks.push({
-            client: client.token,
+            client: client,
             regex: regex
         });
     }
