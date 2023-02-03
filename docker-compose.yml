@@ -17,16 +17,10 @@ services:
       - backend
 
   nodeAuth:
-    image: "node:latest"
-    user: "node"
-    working_dir: /home/node/app
-    environment:
-      - NODE_ENV=production
-    volumes:
-      - ./database:/home/node/app
+    image: "autentication"
+    build: ./database/
     ports:
       - "3000:3000"
-    command: "npm start"
     depends_on:
       - mongo
     networks:
@@ -50,7 +44,7 @@ services:
       - "8080:443"
     volumes:
       - ./client:/usr/share/nginx/html
-      - ./default.conf:/etc/nginx/conf.d/nginx.conf
+      - ./default.conf:/etc/nginx/conf.d/nnx.conf
       - ./certificates/user/ca.crt:/etc/nginx/client_certs/ca.crt
       - ./certificates/server/server.crt:/etc/nginx/server_certs/server.crt
       - ./certificates/server/server.key:/etc/nginx/server_certs/server.key
