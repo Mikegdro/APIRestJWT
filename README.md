@@ -4,6 +4,7 @@ API Rest utilizando Json Web Tokens para la autentificación de usuarios, con Mo
 ---------------- Instalación ---------------------------<br/>
 
 Usar los siguientes comandos:
+
     1) npm install //En todas las carpetas con package*.json
     2) docker-compose up --build //En la carpeta general para montar los servicios y usar la aplicación 
 
