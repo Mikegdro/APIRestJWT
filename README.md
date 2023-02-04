@@ -6,8 +6,8 @@ Usar el comando npm install en las carpetas regexMicroservice y database para in
 
 ---------------- Client ---------------------------<br/>
 
-    Cliente que conecta al usuario final con la lógica del programa sin dejarle acceso. Se conecta a un proxy que redirige las peticiones a los respectivos servidores.
-    Este cliente está desarrollado haciendo uso de librerías Front-end como VueJS y TailwindCSS para así ofrecerle al usuario la mejor experiencia posible.
+Cliente que conecta al usuario final con la lógica del programa sin dejarle acceso. Se conecta a un proxy que redirige las peticiones a los respectivos servidores.
+Este cliente está desarrollado haciendo uso de librerías Front-end como VueJS y TailwindCSS para así ofrecerle al usuario la mejor experiencia posible.
 
     Tecnologías:
         · VueJS
@@ -16,9 +16,8 @@ Usar el comando npm install en las carpetas regexMicroservice y database para in
 
 ----------------- Auth ---------------------<br/>
 
-    Servidor de autenticación, que requiere de certificados en la parte del cliente, para que así solo los ordenadores autorizados por la compañía puedan acceder.
-    Para hacer uso de esta aplicación es necesario instalar en el navegador el archivo ./certificates/user/user.pfx .
-
+Servidor de autenticación, que requiere de certificados en la parte del cliente, para que así solo los ordenadores autorizados por la compañía puedan acceder.
+Para hacer uso de esta aplicación es necesario instalar en el navegador el archivo ./certificates/user/user.pfx .
 
 
 ----------------- Calculator ----------------<br/>
