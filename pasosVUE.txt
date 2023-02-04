@@ -1,0 +1,56 @@
+Aquí voy a hacer un log de todo lo que voy haciendo con vue para empezar un proyecto 
+front-end con el framework
+
+VueJS
+
+    1- npm init vue@latest
+        · Nos crea todo el scaffolding del proyecto, aquí podemos editar, modificar o 
+        eliminar lo que no necesitemos
+
+    2- Entrar en la carpeta del cliente una vez instalado y hacer un npm install para 
+    instalar las dependencias
+
+    3- Con esto ya podemos hacer npm run dev y nos arranca un servidor de desarrollo 
+    
+Para instalar tailwindcss en un proyecto con vue tenemos que seguir los siguientes pasos:
+
+    1- npm install -D tailwindcss postcss autoprefixer
+        · Esto nos instala no solo tailwind, si no que tambien postcss y autoprefixer
+        los cuales son necesarios
+
+    2- npx tailwindcss init -p 
+        · Creamos el archivo de configuración de tailwind
+
+    3- Introducimos en el archivo de configuración el archivo en el que tiene que buscar
+    las clases de tailwind para aplicarlas
+        · En este caso = "./index.html", "./src/**/*.{vue,ts,js,jsx,tsx}"
+        Va a buscar los index.html y todos los archivos que acaben en .vue, .ts y etc
+        para aplicarles estilos { Esto es porque vamos a tener componentes en la carpeta
+        src en los que utilizaremos clases de tailwind }
+
+    4- Creamos un archivo CSS, en este caso yo siguiendo el tutorial lo cree en src/assets
+    y lo llamamos tailwind.css, en el usamos las directivas tailwind para instalar los 
+    componenetes de tailwind.
+         @tailwind base;
+         @tailwind components;
+         @tailwind utilities;
+
+    5- Vamos al archivo main, y en este importamos el archivo tailwind.css que hemos
+    creado para que vue lo tenga cargado
+
+Configurando Tailwind
+
+    1- Podemos configurar tailwind usando su archivo de configuración, en este en el 
+    objeto extend que está dentro de theme, podemos introducir nuestras variables 
+    personalizadas para usarlas más tarde en nuestro html
+
+    2- En mi caso voy a usar la directiva para configurar la fuente de la página que
+    va a ser work sans, porque me gusta.
+
+    3- Para que tailwind pueda hacer uso de las fuentes tenemos que importarlas dentro del 
+    html
+
+    4- En el archivo de configuración también se pueden especificar elementos, por ejemplo, 
+    container, y se le ponen características a ese elemento, o también se puede especificar
+    un objeto de screens, donde especificar la resolucion de pantalla de diversas "tallas"
+    para las pantallas por lo que tiene mucha "wiggleroom"
