@@ -4,29 +4,24 @@ API Rest utilizando Json Web Tokens para la autentificación de usuarios, con Mo
 ---------------- Instalación ---------------------------<br/>
 Usar el comando npm install en las carpetas regexMicroservice y database para instalar las respectivas dependencias. Una vez hecho esto se puede usar el comando docker-compose up para levantar los contenedores. 
 
----------------- CLIENT ---------------------------<br/>
-Aplicación front-end servida por un servidor web/proxy, esta aplicación conecta al usuario con ambas lógicas de negocio, la base de datos con el servicio de autenticación y el servicio de expresiones regulares.
+---------------- Client ---------------------------<br/>
 
-    JQuery, Bootstrap, SwiperJS, Socket.io
+    Cliente que conecta al usuario final con la lógica del programa sin dejarle acceso. Se conecta a un proxy que redirige las peticiones a los respectivos servidores.
+    Este cliente está desarrollado haciendo uso de librerías Front-end como VueJS y TailwindCSS para así ofrecerle al usuario la mejor experiencia posible.
 
-Ruta / : http://localhost:80/
+    Tecnologías:
+        · VueJS
+        · TailwindCSS
+        · Vite
 
------------------ Database ---------------------<br/>
-Servidor al que se accede através de un proxy, este tiene una red interna en la cual se encuentra la base de datos y es el único con las credenciales de acceso a dicha base de datos. 
+----------------- Auth ---------------------<br/>
+
+    Servidor de autenticación, que requiere de certificados en la parte del cliente, para que así solo los ordenadores autorizados por la compañía puedan acceder.
+    Para hacer uso de esta aplicación es necesario instalar en el navegador el archivo ./certificates/user/user.pfx .
 
 
-    NodeJS, MongoDB, Mongoose, JsonWebToken, Nginx
 
-Actualización 1/2/2023: Ahora las rutas están protegidas por un certificado que se ha de instalar en el navegador, sin ese certificado no se puede acceder al
-servidor. <br/>
-
-Rutas_proxy: {<br/>
-
-    &nbsp;login: http://localhost:80/api/user/auth/login,<br/>
-    &nbsp;logout: http://localhost:80/api/user/auth/logout<br/>
-}
-
------------------ Servidor REGEX ----------------<br/>
+----------------- Calculator ----------------<br/>
 Servidor de WebSocket con la lógica del servicio de expresiones regulares, solo se puede acceder a el a través de un proxy. Tiene una cola implementada y es capaz de procesar 4 request a la vez por lo que las que vienen de más las mete en una cola para procesarlas más tarde.
 
 Tecnologías --> Jison/lex, Socket.io, JS Workers
