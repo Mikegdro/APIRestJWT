@@ -45,3 +45,4 @@ Servidor de WebSocket con la lógica del servicio de expresiones regulares, solo
     2) Añadirle también Geo-Localización para que nadia de fuera del instituto pueda acceder aparte del certificado.
     3) Desarrollar todas las partes de la aplicación desde 0 para refactorizar lo máximo posible el código y documentarlo de la mejor manera posible.
     4) Desarrollar la interfaz nueva con Vite montando un proyecto en conjunto de VueJS + TailwindCSS que sea sencillo, liviano, bonito y sencillo de utilizar.
+    5) Hacer que el docker-compose AUTOMÁTICAMENTE ejecute npm install en todas las máquinas que lo necesiten para no tener que hacerlo manualmente.
