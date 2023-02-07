@@ -12,6 +12,7 @@ VueJS
 
     3- Con esto ya podemos hacer npm run dev y nos arranca un servidor de desarrollo 
     
+    OJO aquí puede haber problemas con la versión de node, necesita minimo la 14.
 Para instalar tailwindcss en un proyecto con vue tenemos que seguir los siguientes pasos:
 
     1- npm install -D tailwindcss postcss autoprefixer
