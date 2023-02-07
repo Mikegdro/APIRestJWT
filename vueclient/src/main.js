@@ -2,7 +2,7 @@
 import { createApp } from 'vue';
 
 //Importamos nuestra "template como App automáticamente"
-import App from './login.vue';
+import App from './App.vue';
 
 //Importamos los assets de Tailwind
 import './assets/tailwind.css';
