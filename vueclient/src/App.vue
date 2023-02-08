@@ -10,7 +10,10 @@
             pasandole el objeto
         -->
         <loginForm v-if="isLogin" @login="obj => login(obj)"/>
-        <regexForm v-else/>
+        <regexForm v-else @regex="regex => regex(regex)"/>
+        <div v-if="message.type" class="px-5 py-2" :style="{backgroundColor: message.type}">
+            {{ message.content }}
+        </div>
         
     </div>
 </template>
@@ -34,7 +37,7 @@
                 myToken: null,
                 message: {
                     content: '',
-                    type: undefined
+                    type: ''
                 },
             }
         },
@@ -43,6 +46,9 @@
             regexForm
         },
         methods: {
+            async regex(regex) {
+                
+            },
             async login(obj) {
                 try {
                     
@@ -55,8 +61,13 @@
                         body: JSON.stringify(obj)
                     })
 
+                    console.log(res)
+
                     //Recogemos la respuesta
                     let data = await res.json();
+
+                    console.log(data)
+                    
 
                     //Recogemos la variable de error
                     let error = `${data.error}`;
@@ -76,11 +87,12 @@
                         this.communication.init({
                             ip: data.body.serverIp,
                             port: data.body.serverPort,
-                            token: myToken,
+                            token: this.myToken,
                             logout: eval(this.logout),
                             msg: eval(this.msg)
                         })
                     }
+                        
 
                 } catch(err) {
                     console.log(err);
@@ -98,36 +110,34 @@
                 }
 
             },
+            /**
+             * Función con la que cambiar la interfaz al llegar un mensaje nuevo.
+             * También la reutilizo para cambios de interfaz propios para así
+             * reutilizar código.
+             */
             msg(data) {
 
-                switch( data.operation ) {
+                if( data.operation === 'login' || data.operation === 'logout') {
+                
+                    this.isLogin = !this.isLogin;
 
-                    //Logea
-                    case 'login': {
-                        this.isLogin = false;
-                    }
+                } else if( data.operation === 'msg' ) {
+                    
+                    if( data.type === 'error' ) {
 
-                    //Desloguea
-                    case 'logout': {
-                        this.isLogin = true;
-                    }
+                        this.message.content = data.msg;
+                        this.message.type = 'red';
 
-                    //Mensaje
-                    case 'msg': {
+                    } else {
 
-                        if( data.type === 'error' ) {
-                            
-                            console.err(data.msg)
-
-                        } else if( data.type === 'success' ) {
-
-                            console.log(data.msg)
-
-                        }
+                        this.message.content = data.msg;
+                        this.message.type = 'green';
 
                     }
 
                 }
+                
+                
 
             }
         }
