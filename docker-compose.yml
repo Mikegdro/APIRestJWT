@@ -7,13 +7,9 @@ networks:
 services:
   nodeAuth:
     image: "autentication"
-    build: ./database/
+    build: ./auth/
     ports:
       - "3000:3000"
-    depends_on:
-      - mongo
-    networks:
-      - backend
     
   nodeApp:
     image: "node:latest"
@@ -22,7 +18,7 @@ services:
     environment:
       - NODE_ENV=production
     volumes:
-      - ./regexMicroservice:/home/node/app
+      - ./calculator:/home/node/app
     ports:
       - "8023:8023"
     command: "npm start"
