@@ -2,11 +2,3 @@
 @tailwind components;
 @tailwind utilities;
 
-
-.success {
-    background-color: rgba(128, 255, 0, 0.452);
-}
-
-.error {
-    background-color: rgba(255, 0, 0, 0.432);
-}
