@@ -6,7 +6,7 @@
     </form>
 
     <div class="flex gap-10 my-5 flex-col sm:flex-row">
-        <button @click="$emit('login')" class="py-1 px-10 rounded-full bg-teal-100 hover:bg-teal-900 transition-all hover:px-20 hover:text-white">Login</button>
+        <button @click="$emit('login', {email, nombre, password})" class="py-1 px-10 rounded-full bg-teal-100 hover:bg-teal-900 transition-all hover:px-20 hover:text-white">Login</button>
         <button @click="$emit('register')" class="py-1 px-10 rounded-full bg-teal-100 hover:bg-teal-900 transition-all hover:px-20 hover:text-white registerButton">Register</button>
     </div>
 </template>

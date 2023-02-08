@@ -32,7 +32,7 @@ services:
     ports:
       - "8080:443"
     volumes:
-      - ./client:/usr/share/nginx/html
+      - ./vueclient/dist:/usr/share/nginx/html
       - ./default.conf:/etc/nginx/conf.d/nnx.conf
       - ./certificates/user/ca.crt:/etc/nginx/client_certs/ca.crt
       - ./certificates/server/server.crt:/etc/nginx/server_certs/server.crt
