@@ -10,7 +10,7 @@
             pasandole el objeto
         -->
         <loginForm v-if="isLogin" @login="obj => login(obj)"/>
-        <regexForm v-else @regex="regex => regex(regex)"/>
+        <regexForm v-else @regex="exp => regex(exp)"/>
         <div v-if="message.type" class="px-5 py-2" :style="{backgroundColor: message.type}">
             {{ message.content }}
         </div>
@@ -23,10 +23,7 @@
     //Importación de los componentes Hijos
     import loginForm from './loginForm.vue';
     import regexForm from './regex.vue';
-    import { Communication } from '../communication/communication'
-
-    //Inicializamos communication
-    
+    import { Communication } from '../communication/communication'    
 
     //Exportamos el componente padre
     export default {
@@ -47,7 +44,9 @@
         },
         methods: {
             async regex(regex) {
-                
+                if( this.communication ) {
+                    this.communication.send(regex);
+                }
             },
             async login(obj) {
                 try {

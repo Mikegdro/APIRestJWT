@@ -1,5 +1,5 @@
 <template>
-    <form class="flex flex-col w-4/5 gap-10">
+    <form @submit.prevent="$emit('regex', regex)" class="flex flex-col w-4/5 gap-10">
         <input v-model="regex" class="p-2 hover:cursor-text hover:text-black/40" type="text" placeholder="Introduce tu expresión matemática aquí">
     </form>
 
@@ -16,10 +16,7 @@
                 regex: ""
             };
         },
-        methods: {
-            
-        },
-        mounted() {},
+        
     }
 
 </script>

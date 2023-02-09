@@ -1,5 +1,5 @@
 <template>
-    <form class="flex flex-col w-4/5 gap-10">
+    <form @submit.prevent="$emit('login', {email, nombre, password})" class="flex flex-col w-4/5 gap-10">
         <input v-model="email" class="p-2 hover:cursor-text hover:text-black/40" type="text" placeholder="Introduce tu Email aquí">
         <input v-model="nombre" class="p-2 hover:cursor-text" type="text" placeholder="Introduce tu Nombre aquí">
         <input v-model="password" class="p-2 hover:cursor-pointer" type="password" placeholder="Introduce tu Contraseña aquí">

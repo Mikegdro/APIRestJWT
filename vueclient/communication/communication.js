@@ -73,7 +73,7 @@ class Communication {
 
     send(data) {
         const msg = {
-            regex: data[0].value,
+            regex: data,
         }
 
         this.socket.emit('regex', msg);
