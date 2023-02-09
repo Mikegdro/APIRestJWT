@@ -85,7 +85,7 @@
                         this.communication = new Communication();
                         this.communication.init({
                             ip: data.body.serverIp,
-                            port: data.body.serverPort,
+                            port: `${data.body.serverPort}/regex`,
                             token: this.myToken,
                             logout: eval(this.logout),
                             msg: eval(this.msg)

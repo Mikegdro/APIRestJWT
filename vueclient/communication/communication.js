@@ -13,6 +13,8 @@ class Communication {
 
         let serverIP = `ws://${config.ip}:${config.port}`;
         
+        console.log(`Trying to connect through ws to ${serverIP}`);
+
         this.socket = new io(serverIP, {
             auth: {
                 token: config.token
