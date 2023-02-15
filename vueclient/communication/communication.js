@@ -11,14 +11,16 @@ class Communication {
         this.logout = config.logout;
         this.msg = config.msg;
 
-        let serverIP = `ws://${config.ip}:${config.port}`;
+        let serverIP = `wss://${config.ip}:${config.port}`;
         
-        console.log(`Trying to connect through ws to ${serverIP}`);
+        console.log(`Trying to connect through wss to ${serverIP}`);
 
         this.socket = new io(serverIP, {
             auth: {
                 token: config.token
-            }
+            },
+            transports: ['websocket'],
+            withCredentials: true
         });
 
         this.socket.on('open', () => {

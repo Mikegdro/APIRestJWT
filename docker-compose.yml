@@ -1,4 +1,4 @@
-version: "2"
+version: "3.9"
 
 services:
   nodeAuth:
@@ -23,12 +23,12 @@ services:
     image: "nginx:latest"
     volumes:
       - ./vueclient/dist:/usr/share/nginx/html
-      - ./proxy.conf:/etc/nginx/conf.d/nnx.conf
+      - ./proxy.conf:/etc/nginx/conf.d/default.conf
       - ./certificates/user/ca.crt:/etc/nginx/client_certs/ca.crt
-      - ./certificates/server/server.crt:/etc/nginx/server_certs/server.crt
-      - ./certificates/server/server.key:/etc/nginx/server_certs/server.key
+      - ./certificates/proxy/server.crt:/etc/nginx/server_certs/server.crt
+      - ./certificates/proxy/server.key:/etc/nginx/server_certs/server.key
     ports:
-      - "8000:443"
+      - "443:443"
 
   web:
     image: "nginx:latest"
@@ -38,5 +38,6 @@ services:
       - NGINX_HOST=Mikelangelo.com
     volumes:
       - ./vueclient/dist:/usr/share/nginx/html
-      - ./web.conf:/etc/nginx/conf.d/nnx.conf
-  #Todo -> Añadir un servidor Web para que le proxy no cumpla función de servidor web & proxy a la vez    
+      - ./web.conf:/etc/nginx/conf.d/default.conf
+      - ./certificates/webserver/webserver.crt:/etc/nginx/server_certs/webserver.crt
+      - ./certificates/webserver/webserver.key:/etc/nginx/server_certs/webserver.key
