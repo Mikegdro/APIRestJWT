@@ -1,37 +1,14 @@
 # APIRestJWT
-API Rest utilizando Json Web Tokens para la autentificación de usuarios, con MongoDB y Web Sockets.
+Esta aplicación consta de 2 ramas, en las cuales he realizado diferentes implementaciones de la 
+misma aplicación.
 
----------------- Instalación ---------------------------<br/>
-Usar el comando npm install en las carpetas regexMicroservice y database para instalar las respectivas dependencias. Una vez hecho esto se puede usar el comando docker-compose up para levantar los contenedores. 
+La aplicación consiste en una calculadora, desarrollada con JISON, un intérprete de LEX para Javascript. Tenemos un servidor de autentificación, el cual nos autentifica usando una base de datos o (rama v2) un certificado digital instalado en el navegador. Para hacer peticiones a la calculadora se usan Websockets, Workers de javascript para concurrencia y colas implementadas a mano para que sea lo más fluido posible.
 
----------------- CLIENT ---------------------------<br/>
-Aplicación front-end servida por un servidor web/proxy, esta aplicación conecta al usuario con ambas lógicas de negocio, la base de datos con el servicio de autenticación y el servicio de expresiones regulares.
+Rama V1  -- 1 Febrero 2023
 
-    JQuery, Bootstrap, SwiperJS, Socket.io
+    En esta rama se realiza la aplicación de la manera más básica, tiene autenticación con base de datos y usa MongoDB para ello, y autentifica al usuario con un JWT. La interfaz está implementada con JQuery, Bootstrap y SwiperJS.
 
-Ruta / : http://localhost:80/
+Rama V2  -- 15 Febrero 2023
 
------------------ Database ---------------------<br/>
-Servidor al que se accede através de un proxy, este tiene una red interna en la cual se encuentra la base de datos y es el único con las credenciales de acceso a dicha base de datos. 
+    En esta rama he usado mi primer framework Front-End, VueJS, y he realizado una SPA asíncrona que cambia la interfaz por medio de eventos. He utilizado un proxy inverso, que redirige las diversas peticiones a sus respectivos servidores, este servidor consta con certificado (auto-firmado), y redirige las peticiones a 3 servicios distintos, un servidor web (Nginx) que sirve la página, un servidor de autentificación (NodeJS) que nos da acceso mediante JWT, 
 
-
-    NodeJS, MongoDB, Mongoose, JsonWebToken, Nginx
-
-Actualización 1/2/2023: Ahora las rutas están protegidas por un certificado que se ha de instalar en el navegador, sin ese certificado no se puede acceder al
-servidor. <br/>
-
-Rutas_proxy: {<br/>
-
-    &nbsp;login: http://localhost:80/api/user/auth/login,<br/>
-    &nbsp;logout: http://localhost:80/api/user/auth/logout<br/>
-}
-
------------------ Servidor REGEX ----------------<br/>
-Servidor de WebSocket con la lógica del servicio de expresiones regulares, solo se puede acceder a el a través de un proxy. Tiene una cola implementada y es capaz de procesar 4 request a la vez por lo que las que vienen de más las mete en una cola para procesarlas más tarde.
-
-Tecnologías --> Jison/lex, Socket.io, JS Workers
-
-Rutas_proxy: {<br/>
-
-    &nbsp;regex: http://localhost:80/regex<br/>
-}
