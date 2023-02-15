@@ -13,11 +13,12 @@ class Communication {
 
         console.log(config)
 
-        let serverIP = `wss://localhost:443/regex`;
+        let serverIP = `wss://localhost:443`;
         
         console.log(`Trying to connect through wss to ${serverIP}`);
 
         this.socket = new io(serverIP, {
+            path: "/regex",
             auth: {
                 token: config.token
             },
