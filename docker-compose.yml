@@ -1,13 +1,11 @@
 version: "3.9"
 
 services:
-  nodeAuth:
+  auth:
     image: "autentication"
     build: ./auth/
-    ports:
-      - "3000:3000"
     
-  nodeApp:
+  calculator:
     image: "node:latest"
     user: "node"
     working_dir: /home/node/app
@@ -15,9 +13,9 @@ services:
       - NODE_ENV=production
     volumes:
       - ./calculator:/home/node/app
+    command: "npm start"
     ports:
       - "8023:8023"
-    command: "npm start"
 
   proxy:
     image: "nginx:latest"
@@ -32,12 +30,8 @@ services:
 
   web:
     image: "nginx:latest"
-    ports:
-      - "8080:80"
     environment:
       - NGINX_HOST=Mikelangelo.com
     volumes:
       - ./vueclient/dist:/usr/share/nginx/html
       - ./web.conf:/etc/nginx/conf.d/default.conf
-      - ./certificates/webserver/webserver.crt:/etc/nginx/server_certs/webserver.crt
-      - ./certificates/webserver/webserver.key:/etc/nginx/server_certs/webserver.key

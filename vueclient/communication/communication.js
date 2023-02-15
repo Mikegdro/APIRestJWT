@@ -11,7 +11,9 @@ class Communication {
         this.logout = config.logout;
         this.msg = config.msg;
 
-        let serverIP = `wss://${config.ip}:${config.port}`;
+        console.log(config)
+
+        let serverIP = `wss://localhost:443/regex`;
         
         console.log(`Trying to connect through wss to ${serverIP}`);
 

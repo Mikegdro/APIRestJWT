@@ -22,10 +22,10 @@ var tasks = [];
  */
 const httpServer = createServer();
 const io = new Server(httpServer, {
+    path: '/regex',
     cors: {
         origin: "*",
         methods: ["GET", "POST"],
-        credentials: true
     }
 })
 
